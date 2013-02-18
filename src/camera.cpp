@@ -41,3 +41,9 @@ Camera::~Camera() {
   this->up.pop_back();
   this->up.pop_back();
 }
+
+void Camera::look_at(std::vector<float> *target) {
+  gluLookAt(this->pos[0], this->pos[1], this->pos[2],
+	    (*target)[0], (*target)[1], (*target)[2],
+	    this->up[0], this->up[1], this->up[2]);
+}

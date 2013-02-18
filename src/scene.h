@@ -82,6 +82,7 @@ public:
 class Scene {
 private:
   Camera cam;
+  std::vector<float> *cam_target;
   float interp_factor;
   std::vector<SceneNode *> lights;
   std::vector<SceneNode *> objects;
@@ -98,6 +99,8 @@ public:
   void add_node(SceneNode *n);
 
   void step_and_render();
+
+  void set_cam_target(std::vector<float> *target);
 };
 
 

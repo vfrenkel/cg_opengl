@@ -3,9 +3,6 @@
 
 // sets up a sample scene.
 void vf_scene_001(Scene *s) {
-  s->get_cam()->pos[0] = 15.0;
-  s->get_cam()->pos[1] = 15.0;
-
   int teapot_pos[3] = {-5.0, 0.0, 0.0};
 
   s->add_node(new TeapotMesh(s, 2.0f, std::vector<float>(teapot_pos, teapot_pos + 3)));
@@ -15,7 +12,8 @@ void vf_scene_001(Scene *s) {
 
 Scene::Scene() {
   // load up default values.
-  this->cam = Camera(0.0, 0.0, -10.0);
+  this->cam = Camera(0.0, 4.0, -10.0);
+  this->cam_target = new std::vector<float>(3, 0.0);
   // EXTRA: make this based on actual elapsed time.
   this->interp_factor = 1.0;
   this->key_states = new bool[256];
@@ -57,9 +55,8 @@ void Scene::step_and_render() {
   glClearColor(0.0,0.0,0.4,1.0);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
-  gluLookAt(this->cam.pos[0], this->cam.pos[1], this->cam.pos[2],
-	    this->cam.focus[0], this->cam.focus[1], this->cam.focus[2],
-	    this->cam.up[0], this->cam.up[1], this->cam.up[2]);
+  
+  this->cam.look_at(this->cam_target);
 
   for (std::vector<SceneNode *>::iterator n = this->objects.begin(); n != this->objects.end(); n++) {
     (*n)->step();
@@ -70,6 +67,10 @@ void Scene::step_and_render() {
   }
 
   glutSwapBuffers();
+}
+
+void Scene::set_cam_target(std::vector<float> *target) {
+  this->cam_target = target;
 }
 
 SceneNode::SceneNode()
