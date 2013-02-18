@@ -1,8 +1,17 @@
 #ifndef __SCENE_H_
 #define __SCENE_H_
 
+
+#include <GL/glew.h>
+#include <GL/glut.h>
+
+#include <iostream>
+#include <math.h>
 #include <vector>
+
 #include "camera.h"
+
+#define PI 3.14159265358979323846264338327950288419716939937510L
 
 typedef enum {
   OBJECT,
@@ -14,7 +23,7 @@ class Scene;
 class SceneNode {
 protected:
   std::vector<float> pos;
-  std::vector<float> rot;
+  std::vector<double> rot;
   Scene *scene;
   
 public:
@@ -23,24 +32,13 @@ public:
   SceneNode( Scene *scene,
 	     SCENE_NODE_TYPE type,
 	     std::vector<float> pos = std::vector<float>(3,0.0),
-	     std::vector<float> rot = std::vector<float>(3,0.0) );
+	     std::vector<double> rot = std::vector<double>(3,0.0) );
   ~SceneNode();
   
   virtual void step() = 0;
   virtual void render() = 0;
 };
 
-class PlayerCycler : public SceneNode {
-private:
-  std::vector<float> forward_dir;
-
-public:
-  PlayerCycler( Scene *scene,
-	        std::vector<float> pos = std::vector<float>(3,0.0),
-		std::vector<float> rot = std::vector<float>(3,0.0) );
-  virtual void step();
-  virtual void render();
-};
 
 class TeapotMesh : public SceneNode {
 public:
@@ -49,7 +47,7 @@ public:
   TeapotMesh( Scene *scene,
 	      float size,
 	      std::vector<float> pos = std::vector<float>(3,0.0),
-	      std::vector<float> rot = std::vector<float>(3,0.0) );
+	      std::vector<double> rot = std::vector<double>(3,0.0) );
   virtual void step();
   virtual void render();
 };
@@ -61,7 +59,7 @@ public:
   CubeMesh( Scene *scene,
 	    float size,
 	    std::vector<float> pos = std::vector<float>(3,0.0),
-	    std::vector<float> rot = std::vector<float>(3,0.0) );
+	    std::vector<double> rot = std::vector<double>(3,0.0) );
   virtual void step();
   virtual void render();
 };
