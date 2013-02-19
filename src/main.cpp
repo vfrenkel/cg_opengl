@@ -47,7 +47,6 @@ int main(int argc, char **argv) {
   glutCreateWindow("CYCLER: Experimental");
   init();
 
-  SCENE = Scene();
   glutDisplayFunc(display);
   glutIdleFunc(display);
   glutReshapeFunc(reshape);

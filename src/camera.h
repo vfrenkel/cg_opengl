@@ -6,16 +6,25 @@
 #include <GL/glut.h>
 
 class Camera {
- public:
+ private:
   std::vector<float> pos;
-  std::vector<float> focus;
-  std::vector<float> up;
+  std::vector<float> *focus;
+  std::vector<float> *up;
+  std::vector<double> *target_dir;
+  float lag;
+
+ public:
 
   Camera();
   Camera(float posx, float posy, float posz);
   ~Camera();
 
-  void look_at(std::vector<float> *target);
+  void bind_focus(std::vector<float> *target);
+  void bind_up(std::vector<float> *up);
+  void bind_target_dir(std::vector<double> *target_dir);
+
+  void step();
+  void transform_GL();
 };
 
 

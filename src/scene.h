@@ -22,12 +22,13 @@ class Scene;
 
 class SceneNode {
 protected:
-  std::vector<float> pos;
-  std::vector<double> rot;
   Scene *scene;
   
 public:
   SCENE_NODE_TYPE type;
+  std::vector<float> pos;
+  std::vector<double> rot;
+
   SceneNode();
   SceneNode( Scene *scene,
 	     SCENE_NODE_TYPE type,
@@ -82,7 +83,6 @@ public:
 class Scene {
 private:
   Camera cam;
-  std::vector<float> *cam_target;
   float interp_factor;
   std::vector<SceneNode *> lights;
   std::vector<SceneNode *> objects;

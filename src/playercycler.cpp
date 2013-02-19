@@ -10,7 +10,7 @@ PlayerCycler::PlayerCycler(Scene *scene, std::vector<float> pos, std::vector<dou
   forward_dir.push_back(0.0L);
   forward_dir.push_back(1.0L);
 
-  this->scene->set_cam_target(&(this->pos));
+  this->scene->get_cam()->bind_focus(&(this->pos));
 }
 
 void PlayerCycler::step() {
@@ -28,9 +28,6 @@ void PlayerCycler::step() {
   
   // check for and handle key presses
   if (this->scene->key_states['w']) {
-    
-    // increase speed.
-    //TODO: do it logarithmically?
     speed += 0.05f;
   }
 

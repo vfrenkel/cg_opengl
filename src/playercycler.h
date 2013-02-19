@@ -4,13 +4,12 @@
 #include <vector>
 
 class PlayerCycler : public SceneNode {
-private:
+public:
   std::vector<double> forward_dir;
 
-public:
   PlayerCycler( Scene *scene,
 	        std::vector<float> pos = std::vector<float>(3,0.0),
-		std::vector<double> rot = std::vector<double >(3,0.0) );
+		std::vector<double> rot = std::vector<double>(3,0.0) );
   virtual void step();
   virtual void render();
 };

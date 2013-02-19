@@ -6,19 +6,23 @@ void vf_scene_001(Scene *s) {
   int teapot_pos[3] = {-5.0, 0.0, 0.0};
 
   s->add_node(new TeapotMesh(s, 2.0f, std::vector<float>(teapot_pos, teapot_pos + 3)));
-  s->add_node(new PlayerCycler(s));
+  PlayerCycler *player = new PlayerCycler(s);
+  s->add_node(player);
+
+  s->get_cam()->bind_focus(&(player->pos));
+  s->get_cam()->bind_target_dir(&(player->forward_dir));
 }
 
 
 Scene::Scene() {
   // load up default values.
-  this->cam = Camera(0.0, 4.0, -10.0);
-  this->cam_target = new std::vector<float>(3, 0.0);
+  this->cam = Camera();
   // EXTRA: make this based on actual elapsed time.
   this->interp_factor = 1.0;
   this->key_states = new bool[256];
   
   // EXTRA: make this load from a scene description file.
+  // load scene.
   vf_scene_001(this);
 }
 
@@ -56,7 +60,7 @@ void Scene::step_and_render() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
   
-  this->cam.look_at(this->cam_target);
+  this->cam.transform_GL();
 
   for (std::vector<SceneNode *>::iterator n = this->objects.begin(); n != this->objects.end(); n++) {
     (*n)->step();
@@ -67,10 +71,6 @@ void Scene::step_and_render() {
   }
 
   glutSwapBuffers();
-}
-
-void Scene::set_cam_target(std::vector<float> *target) {
-  this->cam_target = target;
 }
 
 SceneNode::SceneNode()
