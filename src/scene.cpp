@@ -20,6 +20,11 @@ Scene::Scene() {
   // EXTRA: make this based on actual elapsed time.
   this->interp_factor = 1.0;
   this->key_states = new bool[256];
+
+  // clear all key states.
+  for (int i = 0; i < 256; i++) {
+    this->key_states[i] = false;
+  }
   
   // EXTRA: make this load from a scene description file.
   // load scene.
@@ -60,7 +65,7 @@ void Scene::step_and_render() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
 
-  glPushMatrix();
+  //glPushMatrix();
   this->cam.step();
   this->cam.transform_GL();
 
@@ -72,9 +77,9 @@ void Scene::step_and_render() {
     glPopMatrix();
   }
 
-  glPopMatrix();
-
   glutSwapBuffers();
+
+  //glPopMatrix();
 }
 
 SceneNode::SceneNode()
