@@ -30,4 +30,4 @@ main:
 
 
 clean:
-	rm -f $(ExeName)
+	rm -f $(ExeName) src/*~

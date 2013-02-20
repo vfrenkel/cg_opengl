@@ -1,6 +1,7 @@
 
 #include "scene.h"
 #include "playercycler.h"
+#include "linalg.h"
 
 
 PlayerCycler::PlayerCycler(Scene *scene, std::vector<float> pos, std::vector<double> rot )
@@ -15,7 +16,7 @@ void PlayerCycler::step() {
   //TODO: look up real bike dimensions and speeds in meters, m/s.
   // TODO: put these into cycler class as private attributes.
   static float speed = 0.1f;
-  double turn_angle_delta = 2.0f;
+  double roll_turn_factor = 2.0f;
   double roll_angle_delta = 5.0f;
 
   this->pos[0] += speed * this->forward_dir[0];
@@ -33,46 +34,40 @@ void PlayerCycler::step() {
 
   // check for and handle key presses
   if (this->scene->key_states['w']) {
-    speed += 0.05f;
-  }
-
-
-  if (this->scene->key_states['a']) {
-    if (this->rot[2] > -30.f) {
-      this->rot[2] -= roll_angle_delta;
-    } else if (this->rot[2] < -30.f && this->rot[2] > -70.f){
-      this->rot[2] -= 2.0f / (70.0f - this->rot[2]);
-    }
-
-    this->rot[1] += turn_angle_delta;
-
-    double tadr = -turn_angle_delta * PI/180L;
-    
-    this->forward_dir[0] = this->forward_dir[0] * cos(tadr)
-                           - this->forward_dir[1] * sin(tadr);
-    this->forward_dir[1] = this->forward_dir[0] * sin(tadr)
-                           + this->forward_dir[1] * cos(tadr);
+    speed += 0.02f;
   }
 
   if (this->scene->key_states['s']) {
-    speed -= 0.05f;
+    speed -= 0.01f;
+  }
+
+  double rot_y = roll_turn_factor * this->rot[2] / 30.0L;
+  this->rot[1] -= rot_y;
+  double tadr = rot_y * PI/180L;
+
+  this->forward_dir[0] = this->forward_dir[0] * cos(tadr)
+    - this->forward_dir[1] * sin(tadr);
+  this->forward_dir[1] = this->forward_dir[0] * sin(tadr)
+    + this->forward_dir[1] * cos(tadr);
+
+  // normalize forward_dir floating point roundoff causes drift towards zero vector.
+  //TODO: REVAMP ENGINE TO USE GLM VECs or at least GLfloats instead of float/double.
+  normalize2L(forward_dir);
+
+  if (this->scene->key_states['a']) {
+    if (this->rot[2] > -30.0L) {
+      this->rot[2] -= roll_angle_delta;
+    } else if (this->rot[2] < -30.0L && this->rot[2] > -45.0L) {
+      this->rot[2] -= roll_angle_delta / (45.0L - this->rot[2]);
+    }
   }
 
   if (this->scene->key_states['d']) {
-    if (this->rot[2] < 30.f) {
+    if (this->rot[2] < 30.0L) {
       this->rot[2] += roll_angle_delta;
-    } else if (this->rot[2] > 30.f && this->rot[2] < 70.f){
-      this->rot[2] += 2.0f / (70.0f - this->rot[2]);
+    } else if (this->rot[2] > 30.0L && this->rot[2] < 45.0L) {
+      this->rot[2] += roll_angle_delta / (45.0L + this->rot[2]);
     }
-
-    this->rot[1] -= turn_angle_delta;
-
-    double tadr = turn_angle_delta * PI/180;
-    
-    this->forward_dir[0] = this->forward_dir[0] * cos(tadr)
-                           - this->forward_dir[1] * sin(tadr);
-    this->forward_dir[1] = this->forward_dir[0] * sin(tadr)
-                           + this->forward_dir[1] * cos(tadr);
   }
 }
 
