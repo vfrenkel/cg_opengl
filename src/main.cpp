@@ -39,6 +39,17 @@ void key_up(unsigned char key, int x, int y) {
   SCENE.key_states[key] = false;
 }
 
+void mouse_movement(int x, int y) {
+  static int mouse_x = x;
+  static int mouse_y = y;
+
+  SCENE.mouse_dx = mouse_x - x;
+  SCENE.mouse_dy = mouse_y - y;
+
+  mouse_x = x;
+  mouse_y = y;
+}
+
 int main(int argc, char **argv) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
@@ -53,6 +64,8 @@ int main(int argc, char **argv) {
 
   glutKeyboardFunc(key_pressed);
   glutKeyboardUpFunc(key_up);
+
+  glutPassiveMotionFunc(mouse_movement);
 
   glutMainLoop();
   

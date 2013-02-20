@@ -59,18 +59,10 @@ void Camera::step() {
   this->pos[0] = this->focus->at(0) - this->lag * this->target_dir->at(0);
   this->pos[1] = this->focus->at(1) + 5.0;
   this->pos[2] = this->focus->at(2) - this->lag * this->target_dir->at(1);
-
-  // this->pos[0] = this->focus->at(0) - this->lag;
-  // this->pos[1] = this->focus->at(1) + 5.0;
-  // this->pos[2] = this->focus->at(2) - this->lag;
 }
 
 void Camera::transform_GL() {
 //TODO: figure out what is wrong with this->up...
-  // gluLookAt(this->pos.at(0), this->pos.at(1), this->pos.at(2),
-  // 	    this->focus->at(0), this->focus->at(1), this->focus->at(2),
-  //  	    this->up->at(0), this->up->at(1), this->up->at(2));
-
   gluLookAt(this->pos.at(0), this->pos.at(1), this->pos.at(2),
   	    this->focus->at(0), this->focus->at(1), this->focus->at(2),
   	    0.0, 1.0, 0.0);

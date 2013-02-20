@@ -92,7 +92,9 @@ public:
   ~Scene();
 
   bool *key_states;
-  
+  // use x and y coords, a max of 720. divide by 3 to get 0.33 degree variations in camera rotation degree.
+  int mouse_dx;
+  int mouse_dy;
 
   Camera *get_cam();
   float get_interp_factor();
