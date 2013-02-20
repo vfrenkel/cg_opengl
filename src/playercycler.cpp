@@ -20,14 +20,22 @@ void PlayerCycler::step() {
 
   this->pos[0] += speed * this->forward_dir[0];
   this->pos[2] += speed * this->forward_dir[1];
-
-  // bleed off speed.
-  speed *= 0.98f;
   
+  if (!(this->scene->key_states['w'] || this->scene->key_states['s'])) {
+    // bleed off speed.
+    speed *= 0.98f;
+  }
+
+  if (!(this->scene->key_states['a'] || this->scene->key_states['d'])) {
+    //bleed off roll.
+    this->rot[2] *= 0.95L;
+  }
+
   // check for and handle key presses
   if (this->scene->key_states['w']) {
     speed += 0.05f;
   }
+
 
   if (this->scene->key_states['a']) {
     if (this->rot[2] > -30.f) {
