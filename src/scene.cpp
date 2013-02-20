@@ -59,7 +59,9 @@ void Scene::step_and_render() {
   glClearColor(0.0,0.0,0.4,1.0);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
-  
+
+  glPushMatrix();
+  this->cam.step();
   this->cam.transform_GL();
 
   for (std::vector<SceneNode *>::iterator n = this->objects.begin(); n != this->objects.end(); n++) {
@@ -69,6 +71,8 @@ void Scene::step_and_render() {
     (*n)->render();
     glPopMatrix();
   }
+
+  glPopMatrix();
 
   glutSwapBuffers();
 }

@@ -9,8 +9,6 @@ PlayerCycler::PlayerCycler(Scene *scene, std::vector<float> pos, std::vector<dou
   // use rotation to calculate initial forward facing direction on the xz plane.
   forward_dir.push_back(0.0L);
   forward_dir.push_back(1.0L);
-
-  this->scene->get_cam()->bind_focus(&(this->pos));
 }
 
 void PlayerCycler::step() {

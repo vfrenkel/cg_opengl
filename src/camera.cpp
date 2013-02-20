@@ -14,7 +14,7 @@ Camera::Camera() {
   this->target_dir = new std::vector<double>(2,0.0);
   this->target_dir->at(1) = 1.0;
 
-  this->lag = 5.0;
+  this->lag = 6.0;
 }
 
 Camera::Camera(float posx, float posy, float posz) {
@@ -30,7 +30,7 @@ Camera::Camera(float posx, float posy, float posz) {
   this->target_dir = new std::vector<double>(2,0.0);
   this->target_dir->at(1) = 1.0;
   
-  this->lag = 5.0;
+  this->lag = 6.0;
 }
 
 Camera::~Camera() {
@@ -46,23 +46,24 @@ Camera::~Camera() {
   this->up->pop_back();
   this->up->pop_back();
   this->up->pop_back();
-//SAFE_DELETE(this->up);
+  //SAFE_DELETE(this->up);
 
   this->target_dir->pop_back();
   this->target_dir->pop_back();
-//SAFE_DELETE(this->target_dir);
+  //SAFE_DELETE(this->target_dir);
 }
 
 //TODO: update position to be based on focus, lag, target_dir like in the translate, so glu lookat will work correctly!
 void Camera::step() {
-
+  // * this->target_dir->at(0)
+  this->pos[0] = this->focus->at(0) - this->lag * this->target_dir->at(0);
+  this->pos[1] = this->focus->at(1);
+  this->pos[2] = this->focus->at(2) - this->lag * this->target_dir->at(1);
 }
 
 void Camera::transform_GL() {
   // move the camera into position above and behind the object.
-  glTranslatef(this->focus->at(0) - this->lag * this->target_dir->at(0),
-	       this->focus->at(1) + 3.0,
-	       this->focus->at(2) - this->lag * this->target_dir->at(1));
+  glTranslatef(this->pos[0], this->pos[1], this->pos[2]);
   
 
 //TODO: figure out what is wrong with this->up...
@@ -74,7 +75,6 @@ void Camera::transform_GL() {
   	    this->focus->at(0), this->focus->at(1), this->focus->at(2),
   	    0.0, 1.0, 0.0);
 }
-
 void Camera::bind_focus(std::vector<float> *target) {
   this->focus = target;
 }
