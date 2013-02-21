@@ -40,14 +40,17 @@ void key_up(unsigned char key, int x, int y) {
 }
 
 void mouse_movement(int x, int y) {
-  static int mouse_x = x;
-  static int mouse_y = y;
+  static int prev_x = x;
+  static int prev_y = y;
 
-  SCENE.mouse_dx = mouse_x - x;
-  SCENE.mouse_dy = mouse_y - y;
+  SCENE.mouse_pos[0] = x;
+  SCENE.mouse_pos[1] = y;
 
-  mouse_x = x;
-  mouse_y = y;
+  SCENE.mouse_vel[0] = prev_x - x;
+  SCENE.mouse_vel[1] = prev_y - y;
+
+  prev_x = x;
+  prev_y = y;
 }
 
 int main(int argc, char **argv) {

@@ -11,6 +11,8 @@ class Camera {
   std::vector<float> *focus;
   std::vector<float> *up;
   std::vector<double> *target_dir;
+  std::vector<int> *mouse_pos;
+  std::vector<int> *mouse_vel;
   float lag;
 
  public:
@@ -22,6 +24,7 @@ class Camera {
   void bind_focus(std::vector<float> *target);
   void bind_up(std::vector<float> *up);
   void bind_target_dir(std::vector<double> *target_dir);
+  void bind_mouse(std::vector<int> *mouse_pos, std::vector<int> *mouse_vel);
 
   void step();
   void transform_GL();

@@ -11,6 +11,7 @@ void vf_scene_001(Scene *s) {
 
   s->get_cam()->bind_focus(&(player->pos));
   s->get_cam()->bind_target_dir(&(player->forward_dir));
+  s->get_cam()->bind_mouse(&(s->mouse_pos), &(s->mouse_vel));
 }
 
 
@@ -20,6 +21,8 @@ Scene::Scene() {
   // EXTRA: make this based on actual elapsed time.
   this->interp_factor = 1.0;
   this->key_states = new bool[256];
+  this->mouse_pos = std::vector<int>(2,0);
+  this->mouse_vel = std::vector<int>(2,0);
 
   // clear all key states.
   for (int i = 0; i < 256; i++) {
@@ -65,7 +68,6 @@ void Scene::step_and_render() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
 
-  //glPushMatrix();
   this->cam.step();
   this->cam.transform_GL();
 
@@ -78,8 +80,6 @@ void Scene::step_and_render() {
   }
 
   glutSwapBuffers();
-
-  //glPopMatrix();
 }
 
 SceneNode::SceneNode()
