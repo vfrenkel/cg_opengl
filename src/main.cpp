@@ -8,10 +8,10 @@
 
 #include "scene.h"
 
-Scene SCENE;
+Scene *SCENE;
 
 void display(void) {
-  SCENE.step_and_render();
+  SCENE->step_and_render();
 }
 
 void reshape(int width, int height) {
@@ -32,22 +32,22 @@ void init() {
 }
 
 void key_pressed(unsigned char key, int x, int y) {
-  SCENE.key_states[key] = true;
+  SCENE->key_states[key] = true;
 }
 
 void key_up(unsigned char key, int x, int y) {
-  SCENE.key_states[key] = false;
+  SCENE->key_states[key] = false;
 }
 
 void mouse_movement(int x, int y) {
   static int prev_x = x;
   static int prev_y = y;
 
-  SCENE.mouse_pos[0] = x;
-  SCENE.mouse_pos[1] = y;
+  SCENE->mouse_pos[0] = x;
+  SCENE->mouse_pos[1] = y;
 
-  SCENE.mouse_vel[0] = prev_x - x;
-  SCENE.mouse_vel[1] = prev_y - y;
+  SCENE->mouse_vel[0] = prev_x - x;
+  SCENE->mouse_vel[1] = prev_y - y;
 
   prev_x = x;
   prev_y = y;
@@ -60,6 +60,8 @@ int main(int argc, char **argv) {
   glutInitWindowPosition(100,100);
   glutCreateWindow("CYCLER: Experimental");
   init();
+
+  SCENE = new Scene();
 
   glutDisplayFunc(display);
   glutIdleFunc(display);

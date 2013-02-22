@@ -2,7 +2,7 @@
 #include "playercycler.h"
 
 // sets up a sample scene.
-void vf_scene_001(Scene *s) {
+static void vf_scene_001(Scene *s) {
   int teapot_pos[3] = {-5.0, 0.0, 0.0};
 
   s->add_node(new TeapotMesh(s, 2.0f, std::vector<float>(teapot_pos, teapot_pos + 3)));
@@ -14,10 +14,10 @@ void vf_scene_001(Scene *s) {
   s->get_cam()->bind_mouse(&(s->mouse_pos), &(s->mouse_vel));
 }
 
-
 Scene::Scene() {
   // load up default values.
   this->cam = Camera();
+  init_display_lists();
   // EXTRA: make this based on actual elapsed time.
   this->interp_factor = 1.0;
   this->key_states = new bool[256];
@@ -39,12 +39,23 @@ Scene::~Scene() {
   
 }
 
+void Scene::init_display_lists() {
+  this->display_lists.assign(NUM_DISPLAY_LISTS, 0);
+  // create the playercycler list
+  this->display_lists[CYCLER_DL] = PlayerCycler::create_display_list();
+  this->display_lists[TEAPOT_DL] = TeapotMesh::create_display_list();
+}
+
 Camera *Scene::get_cam() {
   return &(this->cam);
 }
 
 float Scene::get_interp_factor() {
   return this->interp_factor;
+}
+
+GLuint Scene::get_display_list(DISPLAY_LIST list) {
+  return this->display_lists[list];
 }
 
 // simple, single interface to add nodes,
@@ -104,6 +115,17 @@ TeapotMesh::TeapotMesh( Scene *scene,
   : SceneNode(scene, OBJECT, pos, rot), size(size)
 { }
 
+GLuint TeapotMesh::create_display_list() {
+  GLuint list = glGenLists(1);
+  glNewList(list, GL_COMPILE);
+  
+  glutSolidTeapot(2.0f);
+
+  glEndList();
+  
+  return list;
+}
+
 void TeapotMesh::step() {
   // TODO: check the keyboard states and transform accordingly.
   
@@ -133,7 +155,7 @@ void TeapotMesh::render() {
   glRotatef(this->rot[1], 0.0, 1.0, 0.0);
   glRotatef(this->rot[2], 0.0, 0.0, 1.0);
 
-  glutSolidTeapot(this->size);
+  glCallList(this->scene->get_display_list(TEAPOT_DL));
 }
 
 CubeMesh::CubeMesh( Scene *scene,

@@ -12,11 +12,17 @@
 #include "camera.h"
 
 #define PI 3.14159265358979323846264338327950288419716939937510L
+static const int NUM_DISPLAY_LISTS = 2;
 
 typedef enum {
   OBJECT,
   LIGHT
 } SCENE_NODE_TYPE;
+
+typedef enum {
+  CYCLER_DL,
+  TEAPOT_DL
+} DISPLAY_LIST;
 
 class Scene;
 
@@ -25,6 +31,7 @@ protected:
   Scene *scene;
   
 public:
+
   SCENE_NODE_TYPE type;
   std::vector<float> pos;
   std::vector<double> rot;
@@ -49,8 +56,11 @@ public:
 	      float size,
 	      std::vector<float> pos = std::vector<float>(3,0.0),
 	      std::vector<double> rot = std::vector<double>(3,0.0) );
+
   virtual void step();
   virtual void render();
+  
+  static GLuint create_display_list();
 };
 
 class CubeMesh : public SceneNode {
@@ -61,6 +71,7 @@ public:
 	    float size,
 	    std::vector<float> pos = std::vector<float>(3,0.0),
 	    std::vector<double> rot = std::vector<double>(3,0.0) );
+
   virtual void step();
   virtual void render();
 };
@@ -86,18 +97,21 @@ private:
   float interp_factor;
   std::vector<SceneNode *> lights;
   std::vector<SceneNode *> objects;
+  std::vector<GLuint> display_lists;
 
 public:
   Scene();
   ~Scene();
 
   bool *key_states;
-  // use x and y coords, a max of 720. divide by 2 to get 0.5 degree variations in camera rotation degree.
   std::vector<int> mouse_pos;
   std::vector<int> mouse_vel;
 
+  void init_display_lists();
+
   Camera *get_cam();
   float get_interp_factor();
+  GLuint get_display_list(DISPLAY_LIST list);
   void add_node(SceneNode *n);
 
   void step_and_render();

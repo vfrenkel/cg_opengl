@@ -4,12 +4,23 @@
 #include "linalg.h"
 
 
-PlayerCycler::PlayerCycler(Scene *scene, std::vector<float> pos, std::vector<double> rot )
+PlayerCycler::PlayerCycler(Scene *scene, std::vector<float> pos, std::vector<double> rot)
   : SceneNode(scene, OBJECT, pos, rot)
 {
   // use rotation to calculate initial forward facing direction on the xz plane.
   forward_dir.push_back(0.0L);
   forward_dir.push_back(1.0L);
+}
+
+GLuint PlayerCycler::create_display_list() {
+  GLuint list = glGenLists(1);
+  glNewList(list, GL_COMPILE);
+  
+  glutSolidCube(2.f);
+
+  glEndList();
+
+  return list;
 }
 
 void PlayerCycler::step() {
@@ -38,7 +49,7 @@ void PlayerCycler::step() {
     if (speed < max_speed) {
       speed += 0.02f;
     } else {
-      speed += 0.0002f;
+      speed += 0.002f;
     }
   }
 
@@ -46,7 +57,7 @@ void PlayerCycler::step() {
     if (speed < max_speed) {
       speed -= 0.01f;
     } else {
-      speed -= 0.0001f;
+      speed -= 0.001f;
     }
   }
 
@@ -89,7 +100,7 @@ void PlayerCycler::render() {
   //glRotatef(this->rot[0], 1.0, 0.0, 0.0);
   glRotatef(this->rot[2], 0.0, 0.0, 1.0);
   
-  glutSolidCube(2.f);
+  glCallList(this->scene->get_display_list(CYCLER_DL));
 }
 
 
