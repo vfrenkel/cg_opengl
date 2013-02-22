@@ -64,13 +64,26 @@ Camera::~Camera() {
   //SAFE_DELETE(this->target_dir);
 }
 
-void Camera::step() {
+void Camera::step_follow() {
   this->pos[0] = this->focus->at(0) - this->lag * this->target_dir->at(0);
   this->pos[1] = this->focus->at(1) + 5.0;
   this->pos[2] = this->focus->at(2) - this->lag * this->target_dir->at(1);
+}
 
-  // accumulate rotation component due to mouse.
-  _tbPointToVector(this->mouse_pos->at(0), this->mouse_pos->at(1), 25.0, 25.0, this->pos);
+void Camera::step_throw() {
+  float dist_to_target = distance3(this->pos, *(this->focus));
+  const float threshold = 130.0f;
+  
+  // throw the camera ahead of bike.
+  if (dist_to_target > threshold) {
+    this->pos[0] = this->focus->at(0) + threshold * this->target_dir->at(0);
+    this->pos[2] = this->focus->at(2) + threshold * this->target_dir->at(1);
+  }
+}
+
+// check timer, throw camera out ahead of bike.
+void Camera::step() {
+  step_throw();
 }
 
 void Camera::transform_GL() {

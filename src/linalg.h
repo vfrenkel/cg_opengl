@@ -10,6 +10,13 @@ static void normalize2L(std::vector<double> &v) {
   v[1] = v[1] / norm;
 }
 
+static float distance3(std::vector<float> &a, std::vector<float> &b) {
+  float x = b[0] - a[0];
+  float y = b[1] - a[1];
+  float z = b[2] - a[2];
+  return (sqrt(x*x + y*y + z*z));
+}
+
 static void _tbPointToVector(int x, int y, int width, int height, std::vector<float> &v)
 {
   float d, a;

@@ -16,6 +16,7 @@ void PlayerCycler::step() {
   //TODO: look up real bike dimensions and speeds in meters, m/s.
   // TODO: put these into cycler class as private attributes.
   static float speed = 0.1f;
+  const float max_speed = 1.0f;
   double roll_turn_factor = 2.0f;
   double roll_angle_delta = 5.0f;
 
@@ -24,7 +25,7 @@ void PlayerCycler::step() {
   
   if (!(this->scene->key_states['w'] || this->scene->key_states['s'])) {
     // bleed off speed.
-    speed *= 0.98f;
+    speed *= 0.99f;
   }
 
   if (!(this->scene->key_states['a'] || this->scene->key_states['d'])) {
@@ -34,11 +35,19 @@ void PlayerCycler::step() {
 
   // check for and handle key presses
   if (this->scene->key_states['w']) {
-    speed += 0.02f;
+    if (speed < max_speed) {
+      speed += 0.02f;
+    } else {
+      speed += 0.0002f;
+    }
   }
 
   if (this->scene->key_states['s']) {
-    speed -= 0.01f;
+    if (speed < max_speed) {
+      speed -= 0.01f;
+    } else {
+      speed -= 0.0001f;
+    }
   }
 
   double rot_y = roll_turn_factor * this->rot[2] / 30.0L;

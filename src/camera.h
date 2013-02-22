@@ -15,6 +15,9 @@ class Camera {
   std::vector<int> *mouse_vel;
   float lag;
 
+  void step_follow();
+  void step_throw();
+
  public:
 
   Camera();
