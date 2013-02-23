@@ -83,7 +83,8 @@ void Camera::step_throw() {
 
 // check timer, throw camera out ahead of bike.
 void Camera::step() {
-  step_throw();
+  //step_throw();
+  step_follow();
 }
 
 void Camera::transform_GL() {
