@@ -15,9 +15,10 @@ PlayerCycler::PlayerCycler(Scene *scene, std::vector<float> pos, std::vector<dou
 GLuint PlayerCycler::create_display_list() {
   GLuint list = glGenLists(1);
   glNewList(list, GL_COMPILE);
-  
-  glutSolidCube(2.f);
-
+  glPushMatrix();
+  glScalef(0.80f, 1.0f, 3.0f);
+  glutSolidCube(1.0f);
+  glPopMatrix();
   glEndList();
 
   return list;

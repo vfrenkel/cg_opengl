@@ -21,10 +21,44 @@ typedef enum {
 
 typedef enum {
   CYCLER_DL,
-  TEAPOT_DL
+  TEAPOT_DL,
+  GRID_PIECE_DL
 } DISPLAY_LIST;
 
-class Scene;
+class SceneNode;
+
+/************************************************************
+ * Scene Class                                              *
+ * stores the current state of the scene, steps and renders *
+ * the elements it stores.                                  *
+ ************************************************************/
+class Scene {
+private:
+  Camera cam;
+  float interp_factor;
+  std::vector<SceneNode *> lights;
+  std::vector<SceneNode *> objects;
+  std::vector<GLuint> display_lists;
+
+public:
+  Scene();
+  ~Scene();
+
+  bool *key_states;
+  std::vector<int> mouse_pos;
+  std::vector<int> mouse_vel;
+
+  void init_display_lists();
+
+  Camera *get_cam();
+  float get_interp_factor();
+  GLuint get_display_list(DISPLAY_LIST list);
+  void add_node(SceneNode *n);
+
+  void step_and_render();
+
+  void set_cam_target(std::vector<float> *target);
+};
 
 class SceneNode {
 protected:
@@ -63,20 +97,6 @@ public:
   static GLuint create_display_list();
 };
 
-class CubeMesh : public SceneNode {
-public:
-  float size;
-
-  CubeMesh( Scene *scene,
-	    float size,
-	    std::vector<float> pos = std::vector<float>(3,0.0),
-	    std::vector<double> rot = std::vector<double>(3,0.0) );
-
-  virtual void step();
-  virtual void render();
-};
-
-
 // TODO: abandoned approach, clean up or complete.
 class InfinitePlaneMesh : public SceneNode {
 public:
@@ -84,40 +104,5 @@ public:
   virtual void step();
   virtual void render();
 };
-
-
-/************************************************************
- * Scene Class                                              *
- * stores the current state of the scene, steps and renders *
- * the elements it stores.                                  *
- ************************************************************/
-class Scene {
-private:
-  Camera cam;
-  float interp_factor;
-  std::vector<SceneNode *> lights;
-  std::vector<SceneNode *> objects;
-  std::vector<GLuint> display_lists;
-
-public:
-  Scene();
-  ~Scene();
-
-  bool *key_states;
-  std::vector<int> mouse_pos;
-  std::vector<int> mouse_vel;
-
-  void init_display_lists();
-
-  Camera *get_cam();
-  float get_interp_factor();
-  GLuint get_display_list(DISPLAY_LIST list);
-  void add_node(SceneNode *n);
-
-  void step_and_render();
-
-  void set_cam_target(std::vector<float> *target);
-};
-
 
 #endif //__SCENE_H_

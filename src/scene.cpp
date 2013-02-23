@@ -1,13 +1,18 @@
 #include "scene.h"
 #include "playercycler.h"
+#include "gridpiece.h"
 
 // sets up a sample scene.
 static void vf_scene_001(Scene *s) {
-  int teapot_pos[3] = {-5.0, 0.0, 0.0};
+  float teapot_pos[3] = {-5.0, 0.0, 0.0};
+  float player_pos[3] = {0.0, 1.0, 0.0};
 
-  s->add_node(new TeapotMesh(s, 2.0f, std::vector<float>(teapot_pos, teapot_pos + 3)));
-  PlayerCycler *player = new PlayerCycler(s);
+  PlayerCycler *player = new PlayerCycler(s, std::vector<float>(player_pos, player_pos+3));
   s->add_node(player);
+
+  // environment setup
+  s->add_node(new TeapotMesh(s, 2.0f, std::vector<float>(teapot_pos, teapot_pos + 3)));
+  s->add_node(new GridPiece(s));
 
   s->get_cam()->bind_focus(&(player->pos));
   s->get_cam()->bind_target_dir(&(player->forward_dir));
@@ -44,6 +49,7 @@ void Scene::init_display_lists() {
   // create the playercycler list
   this->display_lists[CYCLER_DL] = PlayerCycler::create_display_list();
   this->display_lists[TEAPOT_DL] = TeapotMesh::create_display_list();
+  this->display_lists[GRID_PIECE_DL] = GridPiece::create_display_list();
 }
 
 Camera *Scene::get_cam() {
@@ -118,9 +124,9 @@ TeapotMesh::TeapotMesh( Scene *scene,
 GLuint TeapotMesh::create_display_list() {
   GLuint list = glGenLists(1);
   glNewList(list, GL_COMPILE);
-  
+  glPushMatrix();
   glutSolidTeapot(2.0f);
-
+  glPopMatrix();
   glEndList();
   
   return list;
@@ -157,47 +163,6 @@ void TeapotMesh::render() {
 
   glCallList(this->scene->get_display_list(TEAPOT_DL));
 }
-
-CubeMesh::CubeMesh( Scene *scene,
-		    float size,
-		    std::vector<float> pos,
-		    std::vector<double> rot )
-  : SceneNode(scene, OBJECT, pos, rot), size(size)
-{ }
-
-void CubeMesh::step() {
-  // TODO: check the keyboard states and transform accordingly.
-  
-  // for now, just rotate around z axis.
-  if (this->rot[0] > 360.0f) {
-    this->rot[0] -= 360.0f;
-  } else {
-    this->rot[0] += 2.0f;
-  }
-
-  if (this->rot[1] > 360.0f) {
-    this->rot[1] -= 360.0f;
-  } else {
-    this->rot[1] += 2.0f;
-  }
-
-  if (this->rot[2] > 360.0f) {
-    this->rot[2] -= 360.0f;
-  } else {
-    this->rot[2] += 1.0f;
-  }
-}
-
-void CubeMesh::render() {
-  glTranslatef(this->pos[0], this->pos[1], this->pos[2]);
-
-  glRotatef(this->rot[0], 1.0, 0.0, 0.0);
-  glRotatef(this->rot[1], 0.0, 1.0, 0.0);
-  glRotatef(this->rot[2], 0.0, 0.0, 1.0);
-  
-  glutSolidCube(this->size);
-}
-
 
 
 // TODO: abandoned approach, clean up or complete.
