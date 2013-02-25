@@ -5,8 +5,10 @@
 #include "model.h"
 
 class PlayerCycler : public SceneNode {
+// TODO: revamp so we can support arbitrary number of models and glow models in this scene node.
 private:
   Model model;
+  Model model_glow;
 public:
   std::vector<double> forward_dir;
 
@@ -16,8 +18,6 @@ public:
 
   virtual void step();
   virtual void render();
-
-  static GLuint create_display_list();
 };
 
 

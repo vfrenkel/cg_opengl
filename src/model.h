@@ -53,34 +53,33 @@ static Model load_model(const char *obj_filename, const char *mtl_filename) {
   return model;
 }
 
+static void prep_buffers(Model &m) {
+    glGenBuffers(3, m.vbo_ids);
+
+    glBindBuffer(GL_ARRAY_BUFFER, m.vbo_ids[0]);
+    glBufferData(GL_ARRAY_BUFFER, m.vertices.size() * sizeof(GLfloat), &(m.vertices), GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, m.vbo_ids[1]);
+    glBufferData(GL_ARRAY_BUFFER, m.normals.size(), &(m.normals), GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m.vbo_ids[2]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, m.elements.size() * sizeof(GLushort), &(m.elements), GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
 static void draw_model(Model &m) {
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_NORMAL_ARRAY);
   glVertexPointer(4, GL_FLOAT, 0, m.vertices.data());
   glNormalPointer(GL_FLOAT, 0, m.normals.data());
 
-  //glDrawArrays(GL_TRIANGLES, 0, m.vertices.size());
   glDrawElements(GL_TRIANGLES, m.elements.size(), GL_UNSIGNED_SHORT, m.elements.data());
   
   glDisableClientState(GL_VERTEX_ARRAY);
   glDisableClientState(GL_NORMAL_ARRAY);
 }
-
-/* static void draw_model(Model &m) { */
-  
-/*   glBindBuffer(GL_ARRAY_BUFFER, m.vbo_ids[0]); */
-/*   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m.vbo_ids[2]); */
-
-/*   glEnableClientState(GL_VERTEX_ARRAY); */
-/*   glVertexPointer(4, GL_FLOAT, 0, 0); */
-  
-/*   glDrawElements(GL_TRIANGLES, 2000, GL_UNSIGNED_SHORT, 0); */
-
-/*   glBindBuffer(GL_ARRAY_BUFFER, 0); */
-/*   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); */
-
-/*   glDisableClientState(GL_VERTEX_ARRAY); */
-/* } */
 
 
 

@@ -15,6 +15,7 @@ static void vf_scene_001(Scene *s) {
 
   // THE GRID
   s->add_node(new GridPiece(s));
+
   float grid_W_pos[3] = {0.0, 300.0, 300.0};
   double grid_W_rot[3] = {90.0, 0.0, 0.0};
   s->add_node(new GridPiece(s,

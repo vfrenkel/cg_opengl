@@ -14,37 +14,14 @@ PlayerCycler::PlayerCycler(Scene *scene, std::vector<float> pos, std::vector<dou
   forward_dir.push_back(0.0L);
   forward_dir.push_back(1.0L);
 
-  this->model = load_model("test_objs/Monkey.obj", "test_objs/Bicycle.mtl");
+  this->model = load_model("test_objs/Monkey.obj", "NA");
   this->model.vbo_ids = new GLuint[3];
-  this->model.vbo_ids[0] = 0;
-  this->model.vbo_ids[1] = 0;
-  this->model.vbo_ids[2] = 0;
-  glGenBuffers(3, this->model.vbo_ids);
 
-  glBindBuffer(GL_ARRAY_BUFFER, this->model.vbo_ids[0]);
-  glBufferData(GL_ARRAY_BUFFER, this->model.vertices.size() * sizeof(GLfloat), &(this->model.vertices), GL_STATIC_DRAW);
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  this->model_glow = load_model("test_objs/Monkey_Torus_GLOW.obj", "NA");
+  this->model_glow.vbo_ids = new GLuint[3];
 
-  //glBindBuffer(GL_ARRAY_BUFFER, this->model.vbo_ids[1]);
-  //glBufferData(GL_ARRAY_BUFFER, this->model.normals.size(), &(this->model.normals), GL_STATIC_DRAW);
-
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->model.vbo_ids[2]);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->model.elements.size() * sizeof(GLushort), &(this->model.elements), GL_STATIC_DRAW);
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-}
-
-GLuint PlayerCycler::create_display_list() {
-
-  GLuint list = glGenLists(1);
-  glNewList(list, GL_COMPILE);
-  glPushMatrix();
-  glScalef(0.80f, 1.0f, 3.0f);
-  glutSolidCube(1.0f);
-  glPopMatrix();
-  glEndList();
-
-  return list;
+  prep_buffers(this->model);
+  prep_buffers(this->model_glow);
 }
 
 void PlayerCycler::step() {
@@ -125,9 +102,15 @@ void PlayerCycler::render() {
   glRotatef(this->rot[2], 0.0, 0.0, 1.0);
   
   glPushMatrix();
-
-  glScalef(1.5, 1.5, 1.5);
+  
+  // draw bike, non-glowing.
+  // TODO: scale down actual bike model so you don't have to do this...
+  glScalef(0.75, 0.75, 0.75);
   draw_model(this->model);
+
+  // draw glowing pieces of bike separately (use monkey for now).
+  // render to framebuffer that has post-processing bloom filter applied.
+  draw_model(this->model_glow);
 
   glPopMatrix();
 }

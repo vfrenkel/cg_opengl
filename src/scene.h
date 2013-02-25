@@ -12,7 +12,7 @@
 #include "camera.h"
 
 #define PI 3.14159265358979323846264338327950288419716939937510L
-static const int NUM_DISPLAY_LISTS = 2;
+static const int MAX_DISPLAY_LISTS = 2;
 
 typedef enum {
   OBJECT,
@@ -20,7 +20,6 @@ typedef enum {
 } SCENE_NODE_TYPE;
 
 typedef enum {
-  CYCLER_DL,
   TEAPOT_DL,
   GRID_PIECE_DL
 } DISPLAY_LIST;
