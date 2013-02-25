@@ -1,7 +1,7 @@
 UNAME := $(shell uname)
 
 MacGLFramework = -framework Carbon -framework OpenGL -framework GLUT
-LinuxGLFramework = -lglut -lGLU -lGL
+LinuxGLFramework = -lglut -lGLU -lGL -lGLEW
 GLFramework = NOTYETSET
 
 Include = -I/usr/include/GL -I/usr/include

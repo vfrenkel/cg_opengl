@@ -28,17 +28,16 @@ void reshape(int width, int height) {
 void init() {
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_LIGHTING);
+  glEnable(GL_COLOR_MATERIAL);
   glEnable(GL_LIGHT0);
 
-
-
   // render lights
-  float l0_pos[3] = {0.0,30.0,0.0};
   // change diffuse to low value once glows are in place.
-  float l0_diffuse[4] = { 0.3f, 0.3f, 0.4f, 1.0f };
+  float l0_diffuse[4] = { 0.8f, 0.8f, 1.0f, 1.0f };
   float l0_ambient[4] = { 0.0f, 0.0f, 0.4f, 1.0f };
   glLightfv(GL_LIGHT0, GL_AMBIENT, l0_ambient);
   glLightfv(GL_LIGHT0, GL_DIFFUSE, l0_diffuse);
+  float l0_pos[3] = {0.0, 100.0, 0.0};
   glLightfv(GL_LIGHT0, GL_POSITION, l0_pos);
 
 
@@ -78,6 +77,7 @@ int main(int argc, char **argv) {
   glutInitWindowPosition(100,100);
   glutCreateWindow("CYCLER: Experimental");
   init();
+  glewInit();
 
   SCENE = new Scene();
 

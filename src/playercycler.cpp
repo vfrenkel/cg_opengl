@@ -1,8 +1,11 @@
 
+#include <GL/glew.h>
+#include <GL/glut.h>
+
 #include "scene.h"
 #include "playercycler.h"
 #include "linalg.h"
-
+#include "model.h"
 
 PlayerCycler::PlayerCycler(Scene *scene, std::vector<float> pos, std::vector<double> rot)
   : SceneNode(scene, OBJECT, pos, rot)
@@ -10,9 +13,29 @@ PlayerCycler::PlayerCycler(Scene *scene, std::vector<float> pos, std::vector<dou
   // use rotation to calculate initial forward facing direction on the xz plane.
   forward_dir.push_back(0.0L);
   forward_dir.push_back(1.0L);
+
+  this->model = load_model("test_objs/Bicycle.obj", "test_objs/Bicycle.mtl");
+  this->model.vbo_ids = new GLuint[3];
+  this->model.vbo_ids[0] = 0;
+  this->model.vbo_ids[1] = 0;
+  this->model.vbo_ids[2] = 0;
+  glGenBuffers(3, this->model.vbo_ids);
+
+  glBindBuffer(GL_ARRAY_BUFFER, this->model.vbo_ids[0]);
+  glBufferData(GL_ARRAY_BUFFER, this->model.vertices.size() * sizeof(GLfloat), &(this->model.vertices), GL_STATIC_DRAW);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+  //glBindBuffer(GL_ARRAY_BUFFER, this->model.vbo_ids[1]);
+  //glBufferData(GL_ARRAY_BUFFER, this->model.normals.size(), &(this->model.normals), GL_STATIC_DRAW);
+
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->model.vbo_ids[2]);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->model.elements.size() * sizeof(GLushort), &(this->model.elements), GL_STATIC_DRAW);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
 }
 
 GLuint PlayerCycler::create_display_list() {
+
   GLuint list = glGenLists(1);
   glNewList(list, GL_COMPILE);
   glPushMatrix();
@@ -100,8 +123,17 @@ void PlayerCycler::render() {
 
   //glRotatef(this->rot[0], 1.0, 0.0, 0.0);
   glRotatef(this->rot[2], 0.0, 0.0, 1.0);
+
+
+  // TODO: instead of calling a list, use the VBO you made!
+  //glCallList(this->scene->get_display_list(CYCLER_DL));
   
-  glCallList(this->scene->get_display_list(CYCLER_DL));
+  glPushMatrix();
+
+  glScalef(0.5, 0.5, 0.5);
+  draw_model(this->model);
+
+  glPopMatrix();
 }
 
 

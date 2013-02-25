@@ -9,33 +9,36 @@ GridPiece::GridPiece(Scene *scene, std::vector<float> pos, std::vector<double> r
 { }
 
 GLuint GridPiece::create_display_list() {
-  const int num_bars = 15;
-  const float scale = 10.0f;
-  const float bar_scale = 20.0f;
+  const int num_bars = 60;
+  const float spacing = 10.0f;
+  
+  GLfloat red_emissive_material[] = {1.0, 0.0, 0.0};
+  GLfloat black_out_material[] = {0.0, 0.0, 0.0};
 
   GLuint list = glGenLists(1);
   glNewList(list, GL_COMPILE);
 
   glPushMatrix();
+  //glPushAttrib(GL_MATERIAL);
+  glTranslatef(-num_bars*spacing/2.0,0.0,-num_bars*spacing/2.0);
 
-  glScalef(scale * bar_scale * num_bars + scale * 2, 1.0f, 1.0f);
-  glTranslatef(0.0f, 0.0f, -(scale * num_bars)/2.0f + scale / 2.0f);
+  glBegin(GL_LINES);
   for (unsigned int i = 0; i < num_bars; i++) {
-    glutWireSphere(1/bar_scale, 10, 10);
-    glTranslatef(0.0f, 0.0f, scale);
+    if (i == 0) { 
+      //glColor3f(1.0, 0.0, 0.0);
+      glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, red_emissive_material);
+    } else {
+      glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, black_out_material);
+      //glColor3f(0.0, 0.0, 0.4);
+    }
+    glVertex3f(spacing*i,0,0);
+    glVertex3f(spacing*i,0,spacing*num_bars);
+    glVertex3f(0,0,spacing*i);
+    glVertex3f(spacing*num_bars,0,spacing*i);
   }
+  glEnd();
 
-  glPopMatrix();
-
-  glPushMatrix();
-
-  glScalef(1.0f, 1.0f, scale * bar_scale * num_bars + scale * 2);
-  glTranslatef(-(scale * num_bars)/2.0f + scale / 2.0f, 0.0f, 0.0f);
-  for (unsigned int i = 0; i < num_bars; i++) {
-    glutWireSphere(1/bar_scale, 10, 10);
-    glTranslatef(scale, 0.0f, 0.0f);
-  }
-
+  //glPopAttrib();
   glPopMatrix();
 
   glEndList();

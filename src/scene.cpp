@@ -15,14 +15,14 @@ static void vf_scene_001(Scene *s) {
 
   // THE GRID
   s->add_node(new GridPiece(s));
-  float grid_W_pos[3] = {0.0, 150.0, 150.0};
+  float grid_W_pos[3] = {0.0, 300.0, 300.0};
   double grid_W_rot[3] = {90.0, 0.0, 0.0};
   s->add_node(new GridPiece(s,
 			    std::vector<float>(grid_W_pos, grid_W_pos+3),
 			    std::vector<double>(grid_W_rot, grid_W_rot+3)));
 
-  float grid_A_pos[3] = {0.0, 150.0, 150.0};
-  float grid_A_rot[3] = {90.0, 90.0, 0.0};
+  float grid_A_pos[3] = {300.0, 300.0, 0.0};
+  float grid_A_rot[3] = {0.0, 0.0, 90.0};
   s->add_node(new GridPiece(s,
 			    std::vector<float>(grid_A_pos, grid_A_pos+3),
 			    std::vector<double>(grid_A_rot, grid_A_rot+3)));
@@ -95,6 +95,7 @@ void Scene::add_node(SceneNode *n) {
 
 void Scene::step_and_render() {
   glClearColor(0.01,0.01,0.3,1.0);
+  //glClearColor(1.0,1.0,1.0,1.0);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
 

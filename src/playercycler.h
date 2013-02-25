@@ -2,8 +2,11 @@
 #define __PLAYERCYCLER_H_
 
 #include <vector>
+#include "model.h"
 
 class PlayerCycler : public SceneNode {
+private:
+  Model model;
 public:
   std::vector<double> forward_dir;
 
