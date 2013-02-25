@@ -81,6 +81,8 @@ static void draw_model(Model &m) {
   glDisableClientState(GL_NORMAL_ARRAY);
 }
 
-
+static void draw_model_to_fbo(Model &m, GLuint fbo_id) {
+  
+}
 
 #endif //__MODEL_H_

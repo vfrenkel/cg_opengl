@@ -47,6 +47,8 @@ public:
   std::vector<int> mouse_pos;
   std::vector<int> mouse_vel;
 
+  GLuint *fbo_ids;
+
   void init_display_lists();
 
   Camera *get_cam();

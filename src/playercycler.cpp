@@ -110,7 +110,7 @@ void PlayerCycler::render() {
 
   // draw glowing pieces of bike separately (use monkey for now).
   // render to framebuffer that has post-processing bloom filter applied.
-  draw_model(this->model_glow);
+  draw_model_to_fbo(this->model_glow);
 
   glPopMatrix();
 }

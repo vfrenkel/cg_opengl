@@ -33,6 +33,14 @@ static void vf_scene_001(Scene *s) {
   s->get_cam()->bind_mouse(&(s->mouse_pos), &(s->mouse_vel));
 }
 
+static void init_fbos(Scene *s) {
+  // first buffer, used for glow model post-processing
+  glGenFramebuffers(1, s->fbo_ids);
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+  
+}
+
 Scene::Scene() {
   // load up default values.
   this->cam = Camera();
