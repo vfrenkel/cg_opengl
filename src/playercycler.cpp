@@ -14,7 +14,7 @@ PlayerCycler::PlayerCycler(Scene *scene, std::vector<float> pos, std::vector<dou
   forward_dir.push_back(0.0L);
   forward_dir.push_back(1.0L);
 
-  this->model = load_model("test_objs/Bicycle.obj", "test_objs/Bicycle.mtl");
+  this->model = load_model("test_objs/Monkey.obj", "test_objs/Bicycle.mtl");
   this->model.vbo_ids = new GLuint[3];
   this->model.vbo_ids[0] = 0;
   this->model.vbo_ids[1] = 0;
@@ -123,14 +123,10 @@ void PlayerCycler::render() {
 
   //glRotatef(this->rot[0], 1.0, 0.0, 0.0);
   glRotatef(this->rot[2], 0.0, 0.0, 1.0);
-
-
-  // TODO: instead of calling a list, use the VBO you made!
-  //glCallList(this->scene->get_display_list(CYCLER_DL));
   
   glPushMatrix();
 
-  glScalef(0.5, 0.5, 0.5);
+  glScalef(1.5, 1.5, 1.5);
   draw_model(this->model);
 
   glPopMatrix();
