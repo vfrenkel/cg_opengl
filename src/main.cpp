@@ -38,12 +38,15 @@ void init() {
 
   // render lights
   // change diffuse to low value once glows are in place.
-  float l0_diffuse[4] = { 0.8f, 0.8f, 1.0f, 1.0f };
-  float l0_ambient[4] = { 0.0f, 0.0f, 0.4f, 1.0f };
+  float l0_diffuse[4] = { 0.6f, 0.6f, 0.8f, 1.0f };
+  float l0_ambient[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
   glLightfv(GL_LIGHT0, GL_AMBIENT, l0_ambient);
   glLightfv(GL_LIGHT0, GL_DIFFUSE, l0_diffuse);
   float l0_pos[3] = {0.0, 100.0, 0.0};
   glLightfv(GL_LIGHT0, GL_POSITION, l0_pos);
+
+  float l0_specular[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
+  glLightfv(GL_LIGHT0, GL_SPECULAR, l0_specular);
 
 
   glShadeModel(GL_SMOOTH);
@@ -78,6 +81,7 @@ void mouse_movement(int x, int y) {
 int main(int argc, char **argv) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
+  // TODO: pass width and height to scene.
   glutInitWindowSize(960,540);
   glutInitWindowPosition(100,100);
   glutCreateWindow("CYCLER: Experimental");

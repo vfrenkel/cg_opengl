@@ -96,7 +96,7 @@ void Camera::step() {
 }
 
 void Camera::transform_GL() {
-//TODO: figure out what is wrong with this->up...
+  //TODO: figure out what is wrong with this->up...
   gluLookAt(this->pos.at(0), this->pos.at(1), this->pos.at(2),
   	    this->focus->at(0), this->focus->at(1), this->focus->at(2),
   	    0.0, 1.0, 0.0);

@@ -4,14 +4,19 @@
 
 // sets up a sample scene.
 static void vf_scene_001(Scene *s) {
-  float teapot_pos[3] = {-5.0, 0.0, 0.0};
   float player_pos[3] = {0.0, 1.0, 0.0};
 
   PlayerCycler *player = new PlayerCycler(s, std::vector<float>(player_pos, player_pos+3));
   s->add_node(player);
 
   // environment setup
-  s->add_node(new TeapotMesh(s, 2.0f, std::vector<float>(teapot_pos, teapot_pos + 3)));
+  for (int i = 0; i < 10; i++) {
+    float teapot_pos[3] = {-i*15, 0.0, i*20};
+    if (i %3 == 0) {
+      teapot_pos[2] -= 30.0f;
+    }
+    s->add_node(new TeapotMesh(s, 2.0f, std::vector<float>(teapot_pos, teapot_pos + 3)));
+  }
 
   // THE GRID
   s->add_node(new GridPiece(s));
@@ -47,7 +52,7 @@ static void init_postproc(Scene *s) {
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-Scene::Scene() {
+Scene::Scene() {  
   // load up default values.
   this->cam = Camera();
   init_display_lists();
@@ -109,8 +114,8 @@ void Scene::add_node(SceneNode *n) {
 }
 
 void Scene::step_and_render() {
-  //glClearColor(0.01,0.01,0.3,1.0);
-  glClearColor(0.0,0.0,0.0,0.0);
+  glClearColor(0.01,0.01,0.3,1.0);
+  //glClearColor(0.0,0.0,0.0,0.0);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
 
@@ -161,7 +166,7 @@ GLuint TeapotMesh::create_display_list() {
   GLuint list = glGenLists(1);
   glNewList(list, GL_COMPILE);
   glPushMatrix();
-  glutSolidTeapot(2.0f);
+  glutSolidTeapot(10.0f);
   glPopMatrix();
   glEndList();
   
@@ -191,7 +196,7 @@ void TeapotMesh::step() {
 }
 
 void TeapotMesh::render() {
-  glTranslatef(this->pos[0], this->pos[1], this->pos[2]);  
+  glTranslatef(this->pos[0], this->pos[1], this->pos[2]);
 
   glRotatef(this->rot[0], 1.0, 0.0, 0.0);
   glRotatef(this->rot[1], 0.0, 1.0, 0.0);

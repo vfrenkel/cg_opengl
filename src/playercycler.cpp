@@ -104,14 +104,31 @@ void PlayerCycler::render() {
   
   glPushMatrix();
   
-  // draw bike, non-glowing.
-  // TODO: scale down actual bike model so you don't have to do this...
-  glScalef(0.75, 0.75, 0.75);
+  // draw bike, non-glowing pieces.
+  const GLfloat dark_diffuse_material[] = {0.0, 0.0, 0.0, 1.0};
+  const GLfloat blank_diffuse_material[] = {0.5, 0.5, 0.5, 1.0};
+  const GLfloat dark_blue_emissive_material[] = {0.0, 0.0, 0.5, 1.0};
+  const GLfloat white_specular_material[] = {1.0, 1.0, 1.0, 1.0};
+  const GLfloat zero_material[] = {0.0, 0.0, 0.0, 0.0};
+  const GLfloat shininess[] = {255.0f};
+  const GLfloat zero_shiny[] = {0.0f};
+
+  glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, dark_diffuse_material);
+  glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, dark_blue_emissive_material);
+  glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, white_specular_material);
+  glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
+
   draw_model(this->model);
 
+  // TODO: learn about shaders to create the glow effect.
   // draw glowing pieces of bike separately (use monkey for now).
   // render to framebuffer that has post-processing bloom filter applied.
   draw_model_to_fbo(this->model_glow, this->scene->fbo_ids[0], this->scene->rbo_ids[0]);
+
+  glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, zero_material);
+  glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, zero_material);
+  glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, zero_material);
+  glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, zero_shiny);
 
   glPopMatrix();
 }

@@ -89,8 +89,8 @@ static void draw_model_to_fbo(Model &m, GLuint fbo_id, GLuint rbo_id) {
   draw_model(m);
 
   // motion blur.
-  glAccum(GL_MULT, 0.83);
-  glAccum(GL_ACCUM, 0.17);
+  glAccum(GL_MULT, 0.80);
+  glAccum(GL_ACCUM, 0.20);
   glAccum(GL_RETURN, 1.0);
 
   //glBindFramebuffer(GL_FRAMEBUFFER, 0);
