@@ -19,6 +19,7 @@ class Camera {
   void step_throw();
 
  public:
+  bool is_follow;
 
   Camera();
   Camera(float posx, float posy, float posz);

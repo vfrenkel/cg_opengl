@@ -78,7 +78,7 @@ void mouse_movement(int x, int y) {
 int main(int argc, char **argv) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-  glutInitWindowSize(800,800);
+  glutInitWindowSize(960,540);
   glutInitWindowPosition(100,100);
   glutCreateWindow("CYCLER: Experimental");
   init();

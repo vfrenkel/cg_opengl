@@ -42,7 +42,7 @@ static void init_postproc(Scene *s) {
 
   glGenRenderbuffers(1, s->rbo_ids);
   glBindRenderbuffer(GL_RENDERBUFFER, s->rbo_ids[0]);
-  glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA4, 800, 800);
+  glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA4, 960, 540);
   
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
@@ -115,6 +115,12 @@ void Scene::step_and_render() {
   glLoadIdentity();
 
   // render camera
+  // switch to follow-cam while user holds 'o' key.
+  if (this->key_states['o']) {
+    this->cam.is_follow = true;
+  } else {
+    this->cam.is_follow = false;
+  }
   this->cam.step();
   this->cam.transform_GL();
 

@@ -4,6 +4,7 @@
 
 #include "camera.h"
 #include "linalg.h"
+#include "scene.h"
 
 Camera::Camera() {
   this->pos = std::vector<float>(3,0.0);
@@ -22,6 +23,8 @@ Camera::Camera() {
   this->mouse_vel = NULL;
 
   this->lag = 12.0;
+  
+  this->is_follow = false;
 }
 
 Camera::Camera(float posx, float posy, float posz) {
@@ -41,6 +44,8 @@ Camera::Camera(float posx, float posy, float posz) {
   this->mouse_vel = NULL;
   
   this->lag = 12.0;
+  
+  this->is_follow = false;
 }
 
 // TODO: add smarter pop logic, and actual deletes...
@@ -83,8 +88,11 @@ void Camera::step_throw() {
 
 // check timer, throw camera out ahead of bike.
 void Camera::step() {
-  step_throw();
-  //step_follow();
+  if (this->is_follow) {
+    step_follow();
+  } else {
+    step_throw();
+  }
 }
 
 void Camera::transform_GL() {
