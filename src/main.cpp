@@ -23,6 +23,9 @@ void reshape(int width, int height) {
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
+
+  glClearAccum(0.0,0.0,0.0,1.0);
+  glClear(GL_ACCUM_BUFFER_BIT);
 }
 
 void init() {
@@ -30,6 +33,8 @@ void init() {
   glEnable(GL_LIGHTING);
   glEnable(GL_COLOR_MATERIAL);
   glEnable(GL_LIGHT0);
+  glClearAccum(0.0,0.0,0.0,1.0);
+  glClear(GL_ACCUM_BUFFER_BIT);
 
   // render lights
   // change diffuse to low value once glows are in place.

@@ -33,18 +33,25 @@ static void vf_scene_001(Scene *s) {
   s->get_cam()->bind_mouse(&(s->mouse_pos), &(s->mouse_vel));
 }
 
-static void init_fbos(Scene *s) {
+static void init_postproc(Scene *s) {
+  s->fbo_ids = new GLuint[1];
+  s->rbo_ids = new GLuint[1];
   // first buffer, used for glow model post-processing
   glGenFramebuffers(1, s->fbo_ids);
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+  glBindFramebuffer(GL_FRAMEBUFFER, s->fbo_ids[0]);
 
+  glGenRenderbuffers(1, s->rbo_ids);
+  glBindRenderbuffer(GL_RENDERBUFFER, s->rbo_ids[0]);
+  glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA4, 800, 800);
   
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 Scene::Scene() {
   // load up default values.
   this->cam = Camera();
   init_display_lists();
+  init_postproc(this);
   // EXTRA: make this based on actual elapsed time.
   this->interp_factor = 1.0;
   this->key_states = new bool[256];
@@ -64,6 +71,7 @@ Scene::Scene() {
 Scene::~Scene() {
   // TODO: pop all nodes off and destroy each one properly.
   
+  glDeleteFramebuffers(1, this->fbo_ids);
 }
 
 void Scene::init_display_lists() {
@@ -101,8 +109,8 @@ void Scene::add_node(SceneNode *n) {
 }
 
 void Scene::step_and_render() {
-  glClearColor(0.01,0.01,0.3,1.0);
-  //glClearColor(1.0,1.0,1.0,1.0);
+  //glClearColor(0.01,0.01,0.3,1.0);
+  glClearColor(0.0,0.0,0.0,0.0);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
 

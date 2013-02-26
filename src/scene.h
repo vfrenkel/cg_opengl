@@ -48,6 +48,7 @@ public:
   std::vector<int> mouse_vel;
 
   GLuint *fbo_ids;
+  GLuint *rbo_ids;
 
   void init_display_lists();
 

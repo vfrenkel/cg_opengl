@@ -14,10 +14,11 @@ PlayerCycler::PlayerCycler(Scene *scene, std::vector<float> pos, std::vector<dou
   forward_dir.push_back(0.0L);
   forward_dir.push_back(1.0L);
 
-  this->model = load_model("test_objs/Monkey.obj", "NA");
+  //this->model = load_model("test_objs/Monkey.obj", "NA");
+  this->model = load_model("test_objs/tron.obj", "NA");
   this->model.vbo_ids = new GLuint[3];
 
-  this->model_glow = load_model("test_objs/Monkey_Torus_GLOW.obj", "NA");
+  this->model_glow = load_model("test_objs/Bike_Monkey.obj", "NA");
   this->model_glow.vbo_ids = new GLuint[3];
 
   prep_buffers(this->model);
@@ -110,7 +111,7 @@ void PlayerCycler::render() {
 
   // draw glowing pieces of bike separately (use monkey for now).
   // render to framebuffer that has post-processing bloom filter applied.
-  draw_model_to_fbo(this->model_glow);
+  draw_model_to_fbo(this->model_glow, this->scene->fbo_ids[0], this->scene->rbo_ids[0]);
 
   glPopMatrix();
 }

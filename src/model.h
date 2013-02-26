@@ -81,8 +81,19 @@ static void draw_model(Model &m) {
   glDisableClientState(GL_NORMAL_ARRAY);
 }
 
-static void draw_model_to_fbo(Model &m, GLuint fbo_id) {
-  
+// TODO: complete this when you learn about vertex/fragment shaders...
+// this is supposed to blur the drawn model's pixels and boost their brightness to create a glow effect,
+// but while we haven't covered shaders, i'll just put motion blur here as a placeholder.
+static void draw_model_to_fbo(Model &m, GLuint fbo_id, GLuint rbo_id) {
+  //glBindFramebuffer(GL_FRAMEBUFFER, fbo_id);
+  draw_model(m);
+
+  // motion blur.
+  glAccum(GL_MULT, 0.83);
+  glAccum(GL_ACCUM, 0.17);
+  glAccum(GL_RETURN, 1.0);
+
+  //glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 #endif //__MODEL_H_
